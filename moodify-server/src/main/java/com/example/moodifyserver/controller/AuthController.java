@@ -31,11 +31,11 @@ public class AuthController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
     @PostMapping("/callback")
     public ResponseEntity<Map<String,String>> setAuthTokens(@RequestBody String code) {
         try {
-            String trimCode = code.substring(0,code.length()-1);
-            return new ResponseEntity<>(authCodeService.authorizationCode_Async(trimCode), HttpStatus.OK);
+            return new ResponseEntity<>(authCodeService.authorizationCode_Async(code), HttpStatus.OK);
         }
         catch(Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
