@@ -1,34 +1,50 @@
 import React , {useEffect, useCallback, useState} from 'react';
 import queryString from 'query-string';
-import axios from 'axios';
-import playlistModal from './playlistModal';
-axios.defaults.baseURL = "http://localhost:8080";
+import * as auth from '../api/auth';
+import * as spotify from '../api/spotify';
+
+import Webcam from 'react-webcam';
 
 const LandingPage = ({location}) => {
-  const api = "/api/v1/auth";
-  const playlistApi = "/api/v1/playlist";
-  useEffect(() => {
-    const {code} = queryString.parse(location.search); 
-    axios.post(api +"/callback",code).then((data)=>{
-      console.log(data);     
-  }).catch((error)=> {
-      console.log(error)
-  })
 
-  },[])
-  const handleSubmitClick = (e) => {
-    axios.get(api +"/redirect").then((data)=>{
-        window.location.href = data.data;
-    }).catch((error)=> {
-        console.log(error)
-    })
-}
-  return(
-    <div className = "text-center">
-      <h1>BEST SPOTIFY APP</h1>
-      <button  type = "submit" onClick = {handleSubmitClick}> Save Song</button>
+    // TODO: extract webcam
+    const webcamRef = React.useRef(null);
+    const [screenshot, setScreenshot] = useState("");
 
-    </div>
-  )
+    const capture = React.useCallback(() => {
+        const imageSrc = webcamRef.current.getScreenshot();
+        console.log(imageSrc);
+        setScreenshot(imageSrc);
+    },[webcamRef])
+
+
+    useEffect(() => {
+        // extract code from URL
+        const {code} = queryString.parse(location.search);
+        auth.getTokens(code)
+    }, [location.search]);
+
+    const testToken = useCallback(() => {
+        auth.sendToken();
+    }, []);
+
+    const getUserProfile = useCallback(() => {
+        spotify.getUserProfile()
+            .then((res) => {
+                console.log(res);
+            })
+    }, [])
+
+    return(
+        <div className = "text-center">
+            <h1>BEST SPOTIFY APP</h1>
+            <button onClick={testToken}> test token </button>
+            <button onClick={getUserProfile}> Get User profile </button>
+            {/* TODO extract webcam to component. */}
+            <Webcam audio={false} ref={webcamRef} screenshotFormat="image/png"/>
+            <button onClick={capture}>Capture photo</button>
+            {screenshot ?    <img src={`${screenshot}`}/> : ''}
+        </div>
+    )
 };
 export default LandingPage;
