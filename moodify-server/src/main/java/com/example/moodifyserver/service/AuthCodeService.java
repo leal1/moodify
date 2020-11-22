@@ -14,9 +14,9 @@ import java.util.Map;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionException;
+
 @Service
 public class AuthCodeService {
-
     private static final URI redirectUri = SpotifyHttpManager.makeUri("http://localhost:3000/LandingPage");
 
     private static final SpotifyApi spotifyApi = new SpotifyApi.Builder()
@@ -45,11 +45,12 @@ public class AuthCodeService {
         final CompletableFuture<AuthorizationCodeCredentials> authorizationCodeCredentialsFuture = authorizationCodeRequest.executeAsync();
         // Example Only. Never block in production code.
         final AuthorizationCodeCredentials authorizationCodeCredentials = authorizationCodeCredentialsFuture.join();
-       // spotifyApi.setAccessToken(authorizationCodeCredentials.getAccessToken());
-        //spotifyApi.setRefreshToken(authorizationCodeCredentials.getRefreshToken());
-        tokens.put("accessToken",authorizationCodeCredentials.getAccessToken());
-        tokens.put("refreshToken",authorizationCodeCredentials.getRefreshToken());
+        spotifyApi.setAccessToken(authorizationCodeCredentials.getAccessToken());
+        spotifyApi.setRefreshToken(authorizationCodeCredentials.getRefreshToken());
+        tokens.put("accessToken",spotifyApi.getAccessToken());
+        tokens.put("refreshToken",spotifyApi.getRefreshToken());
         System.out.println("refresh: " + tokens.get("refreshToken"));
+        System.out.println("access: " + tokens.get("accessToken"));
         return tokens;
     }
 }
