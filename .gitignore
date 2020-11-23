@@ -85,3 +85,6 @@ test-output
 atlassian-ide-plugin.xml
 .gradletasknamecache
 application.properties
+
+# Visual Studio 2019
+.vs/
