@@ -1,6 +1,6 @@
 import axios from '../util/axiosConfig';
 import Cookies from 'js-cookie';
-import {API_BASE_URL} from '../util/constants';
+import { BASE_API_URL } from '../util/constants';
 
 export const getUserProfile = () => {
         const accessToken = Cookies.get('accessToken');
@@ -8,6 +8,6 @@ export const getUserProfile = () => {
         const headers = {
                 'Authorization': `Bearer ${accessToken}`
         }
-        // Have to call like this to pass
-        return axios({ method: 'get', url: '/api/v1/test/userProfile', headers});
+        // Have to call like this to pass headers
+        return axios({ method: 'get', url: `${BASE_API_URL}/test/userProfile`, headers});
 }

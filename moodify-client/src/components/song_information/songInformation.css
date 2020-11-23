@@ -1,0 +1,28 @@
+.flex-container {
+  display: grid;
+  grid-template-columns: repeat(2, auto [col-start]);
+  grid-template-rows: repeat(2, auto [row-start]);
+  width: 100%;
+
+}
+
+
+.image{
+  grid-column: 1 / span 1;
+  grid-row: 1 / span 2;
+}
+
+.artist {
+  font-size: 80%;
+
+  font-size: 14px;
+  grid-row: 1 / span 1;
+  grid-column: 2 / span 1;
+}
+
+.song {
+  font-size: 80%;
+  font-weight: bold;
+  grid-row: 2 / span 1;
+  grid-column: 2 / span 1;
+}
