@@ -13,16 +13,16 @@ const Login = () => {
     }
 
     return (
-        <div class="container">
-            <div>
-                <h1>Moodify</h1>
-                <br /> <br /> <br />
-                <h2>This is the description for the app</h2>
-                <br /> <br /> <br /> <br /> <br /> <br />
-                <h6>login message</h6>
-                <button type="submit" onClick={handleSubmitClick}> Log In </button>
+            <div class="container">
+                <div>
+                    <h1>Moodify</h1>
+                    <br /> <br /> <br />
+                    <h2>This is the description for the app</h2>
+                    <br /> <br /> <br /> <br /> <br /> <br />
+                    <h6>login message</h6>
+                    <button type="submit" onClick={handleSubmitClick}> Log In </button>
+                </div>
             </div>
-        </div>
     )
 }
 
