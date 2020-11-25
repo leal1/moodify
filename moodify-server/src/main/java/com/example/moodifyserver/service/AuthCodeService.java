@@ -27,7 +27,7 @@ public class AuthCodeService {
 
     private static final AuthorizationCodeUriRequest authorizationCodeUriRequest = spotifyApi.authorizationCodeUri()
 //          .state("x4xkmn9pu3j6ukrs8n")
-            .scope("user-read-private,user-read-email")
+            .scope("user-read-private,user-read-email,user-top-read")
             .show_dialog(true)
             .build();
 

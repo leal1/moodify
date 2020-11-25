@@ -22,7 +22,7 @@ public class AuthController {
         try {
             return new ResponseEntity<>(authCodeService.authorizationCodeUri_Async(), HttpStatus.OK);
         } catch(URISyntaxException e) {
-            return new ResponseEntity<>("Wrong URI Snytax", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("Wrong URI Syntax", HttpStatus.BAD_REQUEST);
         } catch(CompletionException e) {
             return new ResponseEntity<>("Async operation canceled", HttpStatus.BAD_REQUEST);
         } catch(CancellationException e) {
