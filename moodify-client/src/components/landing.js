@@ -2,6 +2,7 @@ import React , {useEffect, useCallback, useState} from 'react';
 import queryString from 'query-string';
 import * as auth from '../api/auth';
 import * as spotify from '../api/spotify';
+import PlaylistModal from './playlistModal';
 
 import Webcam from 'react-webcam';
 
@@ -40,8 +41,10 @@ const LandingPage = ({location}) => {
             <h1>BEST SPOTIFY APP</h1>
             <button onClick={testToken}> test token </button>
             <button onClick={getUserProfile}> Get User profile </button>
+            <PlaylistModal/>
             {/* TODO extract webcam to component. */}
             <Webcam audio={false} ref={webcamRef} screenshotFormat="image/png"/>
+            
             <button onClick={capture}>Capture photo</button>
             {screenshot ?    <img src={`${screenshot}`}/> : ''}
         </div>

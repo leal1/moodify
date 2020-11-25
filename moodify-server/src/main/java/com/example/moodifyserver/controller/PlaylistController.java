@@ -17,10 +17,10 @@ public class PlaylistController {
     private PlaylistService playlistService;
 
     @GetMapping
-
-    public ResponseEntity<PlaylistSimplified[]> getCurUserPlaylists(@RequestHeader(value ="accessToken") String accessToken) {
+    public ResponseEntity<PlaylistSimplified[]> getCurUserPlaylists(@RequestHeader(value ="Authorization") String accessToken) {
         try{
-            return new ResponseEntity<>(playlistService.getCurrentUsersPlaylists(accessToken),HttpStatus.OK);
+            final String accessTokenTrim = accessToken.substring(7);
+            return new ResponseEntity<>(playlistService.getCurrentUsersPlaylists(accessTokenTrim),HttpStatus.OK);
         }
         catch(Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);

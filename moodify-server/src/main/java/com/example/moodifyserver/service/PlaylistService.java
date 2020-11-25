@@ -23,10 +23,7 @@ public class PlaylistService {
                 .build();
         final CompletableFuture<Paging<PlaylistSimplified>> pagingFuture = getListOfCurrentUsersPlaylistsRequest.executeAsync();
         final Paging<PlaylistSimplified> playlistSimplifiedPaging = pagingFuture.join();
-        PlaylistSimplified curUserPlaylists[] = playlistSimplifiedPaging.getItems();
-        return curUserPlaylists;
-
-
+        return playlistSimplifiedPaging.getItems();
     }
 
 }
