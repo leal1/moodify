@@ -9,3 +9,7 @@
 .modal-footer > * {
     margin: 0;
 }
+
+.min-width {
+    min-width: 0;
+}

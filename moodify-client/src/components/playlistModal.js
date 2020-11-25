@@ -1,7 +1,7 @@
 import React, {useState,useCallback} from 'react';
 import {Button, Modal} from 'react-bootstrap';
 import * as spotify from '../api/spotify';
-import './playlistModal.css';
+// import './playlistModal.css';
 const ModalBody = ({playlist}) => {
     return(
     <Modal.Body>{playlist}</Modal.Body>

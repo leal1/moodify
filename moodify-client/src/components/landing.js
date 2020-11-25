@@ -1,6 +1,6 @@
 import React , {useEffect, useCallback, useState} from 'react';
 import WebcamModal from './webcam/webcamModal';
-import Reccomendations from './reccomendations';
+import Reccomendation from './reccomendation/reccomendation';
 import queryString from 'query-string';
 import * as auth from '../api/auth';
 import * as spotify from '../api/spotify';
@@ -30,7 +30,7 @@ const LandingPage = ({location}) => {
                     Launch webcam
                 </Button>
             </div>
-			<Reccomendations/>
+			<Reccomendation/>
         </div>
     )
 };

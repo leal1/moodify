@@ -51,8 +51,8 @@ const WebcamModal = (props) => {
                 <Container fluid>
                     <div class="flex-container">
                     {screenshot===''
-                        ? <Webcam audio={false} ref={webcamRef} screenshotFormat="image/png"/>
-                        : <img src={`${screenshot}`}/>
+                        ? <Webcam className="min-width" audio={false} ref={webcamRef} screenshotFormat="image/png"/>
+                        : <img className="min-width" src={`${screenshot}`}/>
                         
                     }
                     </div>
