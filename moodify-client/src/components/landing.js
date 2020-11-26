@@ -4,12 +4,13 @@ import Reccomendation from './reccomendation/reccomendation';
 import queryString from 'query-string';
 import * as auth from '../api/auth';
 import * as spotify from '../api/spotify';
-import PlaylistModal from './playlistModal';
+import PlaylistModal from './playlistModal/playlistModal';
 
 import Button from 'react-bootstrap/Button';
 
 const LandingPage = ({location}) => {
-	const [modalShow, setModalShow] = React.useState(false);
+    const [modalShow, setModalShow] = React.useState(false);
+    const [playlistModal, setPlaylistModal] = React.useState(false);
 
     useEffect(() => {
         // extract code from URL
@@ -30,7 +31,8 @@ const LandingPage = ({location}) => {
                     Launch webcam
                 </Button>
             </div>
-			<Reccomendation/>
+			<Reccomendation/>    
+            <PlaylistModal/>
         </div>
     )
 };
