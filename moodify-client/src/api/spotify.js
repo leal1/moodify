@@ -18,5 +18,5 @@ export const getUserPlaylists = () => {
                 'Authorization': `Bearer ${accessToken}`
         }
         // Have to call like this to pass
-        return axios({ method: 'get', url: `${BASE_API_URL}/playlists`, headers});
+        return axios({ method: 'get', url: `${BASE_API_URL}/spotify/playlists`, headers});
 }

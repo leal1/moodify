@@ -23,7 +23,7 @@ const WebcamModal = (props) => {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${accessToken}`
         }
-        axios.post(`${BASE_API_URL}/test/sendScreenshot`, imageSrc, {
+        axios.post(`${BASE_API_URL}/rekognition/photo`, imageSrc, {
             headers
         })
         .then((response) => {
