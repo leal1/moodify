@@ -1,0 +1,17 @@
+.playlist-flex  {
+    display:flex;
+    flex-direction:column;
+    
+}
+.playlist-flex-row {
+    height:75px;
+}
+.mt-25 {
+    margin-top:25px;
+}
+
+.img {
+    max-width:100%;
+    max-height:100%;
+    margin-right:20px;
+}
