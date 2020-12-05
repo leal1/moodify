@@ -24,17 +24,17 @@ import java.util.stream.Collectors;
 public class FaceRecognitionService {
     public String getMood(String photo) throws IOException {
         return uploadPhoto(photo);
-
     }
+
     public String uploadPhoto(String photo) throws IOException, SdkClientException, AmazonS3Exception {
         Regions clientRegion = Regions.US_WEST_2;
         String bucketName = "moodify-rekognition-bucket";
         UUID uuid = UUID.randomUUID();
         String key = uuid.toString();
         AmazonS3 s3Client = AmazonS3ClientBuilder.standard()
-                .withRegion(clientRegion)
-               // .withCredentials(new EnvironmentVariableCredentialsProvider())
-                .build();
+            .withRegion(clientRegion)
+           // .withCredentials(new EnvironmentVariableCredentialsProvider())
+            .build();
 
         byte[] bI = java.util.Base64.getMimeDecoder().decode(photo.split(",")[1]);
         InputStream fis = new ByteArrayInputStream(bI);
@@ -49,14 +49,14 @@ public class FaceRecognitionService {
 
     public String detectFace(String key, String bucketName,Regions clientRegion) {
         AmazonRekognition rekognitionClient = AmazonRekognitionClientBuilder.standard()
-                .withRegion(clientRegion)
-                .build();
+            .withRegion(clientRegion)
+            .build();
 
         DetectFacesRequest request = new DetectFacesRequest()
-                .withImage(new Image()
-                        .withS3Object(new S3Object()
-                                .withName(key)
-                                .withBucket(bucketName)))
+            .withImage(new Image()
+                .withS3Object(new S3Object()
+                    .withName(key)
+                    .withBucket(bucketName)))
                 .withAttributes(Attribute.ALL);
         try {
             DetectFacesResult result = rekognitionClient.detectFaces(request);
@@ -64,11 +64,12 @@ public class FaceRecognitionService {
 
             for (FaceDetail face : faceDetails) {
                 if (request.getAttributes().contains("ALL")) {
-                    List<Emotion> emotions = face.getEmotions().stream().filter(EmotionConditions.condHappy
-                            .or(EmotionConditions.condAngry)
-                            .or(EmotionConditions.condSad)
-                            .or(EmotionConditions.condCalm))
-                            .collect(Collectors.toList());
+                    List<Emotion> emotions = face.getEmotions().stream()
+                        .filter(EmotionConditions.condHappy
+                        .or(EmotionConditions.condAngry)
+                        .or(EmotionConditions.condSad)
+                        .or(EmotionConditions.condCalm))
+                        .collect(Collectors.toList());
                     return emotions.get(0).getType();
                 }
             }
