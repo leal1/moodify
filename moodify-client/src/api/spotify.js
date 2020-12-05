@@ -20,3 +20,62 @@ export const getUserPlaylists = () => {
         // Have to call like this to pass
         return axios({ method: 'get', url: `${BASE_API_URL}/spotify/playlists`, headers});
 }
+export const addCurrentSongToPlaylist = (playlistID,URI) => {
+        const accessToken = Cookies.get('accessToken');
+         const headers = {
+                 'Authorization': `Bearer ${accessToken}`
+         }
+     
+         // Have to call like this to pass
+         return axios.post(`${BASE_API_URL}/spotify/playlists/${playlistID}/song?uri=${URI}`,'',{headers});
+}
+
+export const startUserPlayback = (trackURI) => {
+        const accessToken = Cookies.get('accessToken');
+        const deviceID = Cookies.get('deviceID');
+        console.log('deiceID' + deviceID);
+        console.log(trackURI);
+         const headers = {
+                 'Authorization': `Bearer ${accessToken}`,
+                 'Content-Type':'text/plain'    
+         }
+     
+         // Have to call like this to pass
+         return axios.put(`${BASE_API_URL}/spotify/player/start/${deviceID}`,trackURI,{headers});
+      
+}
+export const resumeUserPlayback = () => {
+        const accessToken = Cookies.get('accessToken');
+        const deviceID = Cookies.get('deviceID');
+        console.log('deiceID' + deviceID);
+       // console.log(trackURI);
+         const headers = {
+                 'Authorization': `Bearer ${accessToken}`,
+                 'Content-Type':'text/plain'    
+         }
+     
+         // Have to call like this to pass
+         return axios.put(`${BASE_API_URL}/spotify/player/resume/${deviceID}`,'',{headers});
+      
+}
+export const pauseUserPlayback = () => {
+        const accessToken = Cookies.get('accessToken');
+        const deviceID = Cookies.get('deviceID');
+        console.log('tring to pause song!');
+         const headers = {
+                 'Authorization': `Bearer ${accessToken}`
+         }
+     
+         // Have to call like this to pass
+         return axios.put(`${BASE_API_URL}/spotify/player/pause/${deviceID}`,'',{headers});
+}
+
+export const getUsersCurrentlyPlayingSong = () => {
+        const accessToken = Cookies.get('accessToken');
+         const headers = {
+                 'Authorization': `Bearer ${accessToken}`
+         }
+     
+         // Have to call like this to pass 
+         return axios({ method: 'get', url: `${BASE_API_URL}/spotify/player/currently-playing`, headers});
+}
