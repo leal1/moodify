@@ -3,20 +3,37 @@ import WebcamModal from './webcam/webcamModal';
 import Reccomendation from './reccomendation/reccomendation';
 import queryString from 'query-string';
 import * as auth from '../api/auth';
-import * as spotify from '../api/spotify';
 import PlaylistModal from './playlistModal/playlistModal';
-
+import Player from './player/player';
 import Button from 'react-bootstrap/Button';
+import PlayOrPause from './playorpause/playorpause';
+import * as spotify from '../api/spotify';
 
 const LandingPage = ({location}) => {
     const [modalShow, setModalShow] = React.useState(false);
     const [playlistModal, setPlaylistModal] = React.useState(false);
+    const [pauseSong, setPauseSong] = React.useState(false);
+    const [songData, setSongData] = React.useState('');
+    //click on song, set to true to display button, generate new songs, set it back to false
+    const [displayPlayorPause, setDisplayPlayOrPause] = React.useState(false);
 
     useEffect(() => {
         // extract code from URL
         const {code} = queryString.parse(location.search);
         auth.getTokens(code)
     }, [location.search]);
+
+    const togglePause = () => {
+        setPauseSong(!pauseSong);
+    }
+
+    const songClick = () => {
+        setPauseSong(true);
+    }
+
+    const CurSongData = (data) => {
+        setSongData(data);
+    }
 
     return(
         <div>
@@ -31,8 +48,12 @@ const LandingPage = ({location}) => {
                     Launch webcam
                 </Button>
             </div>
-			<Reccomendation/>    
-            <PlaylistModal/>
+			<Reccomendation CurSongData={CurSongData} songClick={songClick}/>    
+            <PlaylistModal songData={songData}/>
+            <PlayOrPause togglePause={togglePause} pauseSong={pauseSong} songData={songData}/>
+            <Player/>
+            
+
         </div>
     )
 };
