@@ -26,10 +26,11 @@ const WebcamModal = (props) => {
             headers
         })
         .then((response) => {
-            spotify.getSongReccomendations(response.headers.location)
-                .then(res => {
-                    console.log(res);
-                })
+            spotify.getSongReccomendations(response.data)
+            .then(res => {
+                console.log(res);
+            })
+         
         })
     },[webcamRef])
 

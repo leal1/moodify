@@ -86,5 +86,5 @@ export const getSongReccomendations = (mood) => {
                  'Authorization': `Bearer ${accessToken}`
          }
          // Have to call like this to pass 
-         return axios({ method: 'get', url: `${BASE_API_URL}/spotify/recommendations/?mood=${mood}`, headers});
+         return axios({ method: 'get', url: `${BASE_API_URL}/spotify/recommendations?mood=${mood}`, headers});
 }
