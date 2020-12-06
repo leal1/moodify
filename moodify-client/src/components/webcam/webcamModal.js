@@ -3,9 +3,8 @@ import Button from 'react-bootstrap/Button';
 import Container from 'react-bootstrap/Container';
 import React, { useState } from 'react';
 import Cookies from 'js-cookie';
-
 import Webcam from 'react-webcam';
-
+import * as spotify from '../../api/spotify';
 import axios from '../../util/axiosConfig';
 import { BASE_API_URL } from '../../util/constants';
 import './webcamModal.css';
@@ -27,7 +26,10 @@ const WebcamModal = (props) => {
             headers
         })
         .then((response) => {
-            console.log(response);
+            spotify.getSongReccomendations(response.headers.location)
+                .then(res => {
+                    console.log(res);
+                })
         })
     },[webcamRef])
 
