@@ -13,12 +13,13 @@ import java.util.concurrent.CompletableFuture;
 public class RecommendationService {
     int numSongs = 9;
 
-    public TrackSimplified[] getSongRecommendation(String accessToken) {
+    // mood is one of 4 "HAPPY", "SAD", "ANGRY", or "CALM"
+    public TrackSimplified[] getSongRecommendation(String accessToken, String mood) {
         SpotifyApi spotifyApi = new SpotifyApi.Builder()
                 .setAccessToken(accessToken)
                 .build();
 
-        GetRecommendationsRequest recRequest = recRequest(spotifyApi, "Happy");
+        GetRecommendationsRequest recRequest = recRequest(spotifyApi, mood);
 
         final CompletableFuture<Recommendations> recommendationsFuture = recRequest.executeAsync();
 
@@ -37,14 +38,32 @@ public class RecommendationService {
                 .min_popularity(30);
 
         // Can try to seed author/genre/song tracks based either on user history OR chosen songs
-
-        if (mood.equals("Happy")) {
+        if (mood.equals("HAPPY")) {
             recRequest
                     .min_danceability(.7f)
                     .min_energy(.7f)
                     .min_valence(.66f);
+        } else if (mood.equals("SAD")) {
+            recRequest
+                    .min_danceability(.7f)
+                    .max_energy(.4f)
+                    .max_valence(.33f);
+        } else if (mood.equals("CALM")) {
+            recRequest
+                    .max_danceability(.3f)
+                    .max_energy(.4f)
+                    .max_loudness(.8f)
+                    .max_tempo(100f)
+                    .min_acousticness(.7f)
+                    .min_valence(.33f)
+                    .max_valence(.66f);
+        } else if (mood.equals("ANGRY")) {
+            recRequest
+                    .max_danceability(.3f)
+                    .max_energy(.4f)
+                    .min_tempo(100f)
+                    .max_valence(.33f);
         }
-
 
         return recRequest.build();
     }
