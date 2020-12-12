@@ -6,18 +6,15 @@
 .playlist-flex-row {
     display:flex;
     flex-direction:row;
-
-
     height:75px;
 }
 .mt-25 {
     margin-top:25px;
 }
 
-.img {
+.playlist-img {
     max-width:100%;
     max-height:100%;
-    
 }
 .playlistName {
 flex-grow:10;

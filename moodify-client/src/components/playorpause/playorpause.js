@@ -1,6 +1,7 @@
 import React from 'react';
-import {Button, Modal} from 'react-bootstrap';
+import {Button} from 'react-bootstrap';
 import * as spotify from '../../api/spotify';
+import './playorpause.css';
 
 const PlayOrPause = ({togglePause, pauseSong, songData}) => {
 
@@ -20,12 +21,16 @@ const PlayOrPause = ({togglePause, pauseSong, songData}) => {
         })
 
     }
-    const button = pauseSong ?  <Button variant="outline-success" onClick={handlePause}> Pause </Button>
-                             :  <Button variant="outline-success" onClick={handlePlay}> Play </Button>
+    const button = pauseSong ?  <Button className="mt-25" variant="outline-success" onClick={handlePause}> Pause </Button>
+                             :  <Button className="mt-25" variant="outline-success" onClick={handlePlay}> Play </Button>
     return(
         <div className="text-center">
-        {button}
-        <h3>{songData.name}</h3>
+        {songData && button}
+        <div className ="mt-25">
+            <h3>{songData.name}</h3>
+            <p>{ songData && songData.artists.map(artist => artist.name).join(', ')}</p>
+        </div>
+        
         </div>
             
     )

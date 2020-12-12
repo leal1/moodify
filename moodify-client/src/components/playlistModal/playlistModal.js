@@ -2,7 +2,7 @@ import React, {useState,useCallback} from 'react';
 import {Button, Modal} from 'react-bootstrap';
 import * as spotify from '../../api/spotify';
 import Playlist from '../playlist/playlist';
- import './playlistModal.css';
+import './playlistModal.css';
 
 
 const PlaylistModal = ({songData}) => {
@@ -27,7 +27,7 @@ const PlaylistModal = ({songData}) => {
     return (
         <>
             <div className = "text-center mt-25">
-                <Button variant="outline-success" onClick={saveSongCLick}> Save Song </Button>
+                {songData && <Button variant="outline-success" onClick={saveSongCLick}> Save Song </Button>}
             </div>
             <Modal style={{top:"60%"}}show={playlistModal} onHide={() => setPlaylistModal(false)}>
                 <Modal.Header closeButton>
