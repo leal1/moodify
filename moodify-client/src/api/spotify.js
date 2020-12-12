@@ -88,3 +88,12 @@ export const getSongReccomendations = (mood) => {
          // Have to call like this to pass 
          return axios({ method: 'get', url: `${BASE_API_URL}/spotify/recommendations?mood=${mood}`, headers});
 }
+
+export const getSeveralTracks = (ids) => {
+        const accessToken = Cookies.get('accessToken');
+         const headers = {
+                 'Authorization': `Bearer ${accessToken}`
+         }
+         // Have to call like this to pass 
+         return axios({ method: 'get', url: `${BASE_API_URL}/spotify/tracks?ids=${ids}`, headers});
+}

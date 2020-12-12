@@ -32,37 +32,47 @@ public class RecommendationService {
 
     GetRecommendationsRequest recRequest(SpotifyApi spotifyApi, String mood) {
         GetRecommendationsRequest.Builder recRequest = spotifyApi.getRecommendations()
+                .seed_genres("edm")
                 .max_liveness(.5f)
                 .max_speechiness(.66f)
 //                .max_popularity(50)
-                .min_popularity(30);
+                .min_popularity(30)
+                .limit(9);
 
         // Can try to seed author/genre/song tracks based either on user history OR chosen songs
         if (mood.equals("HAPPY")) {
             recRequest
+                    .seed_genres("electronic")
                     .min_danceability(.7f)
                     .min_energy(.7f)
-                    .min_valence(.66f);
+                    .min_valence(.66f)
+                    .limit(9);
         } else if (mood.equals("SAD")) {
             recRequest
+                    .seed_genres("electronic")
                     .min_danceability(.7f)
                     .max_energy(.4f)
-                    .max_valence(.33f);
+                    .max_valence(.33f)
+                    .limit(9);
         } else if (mood.equals("CALM")) {
             recRequest
+                    .seed_genres("electronic")
                     .max_danceability(.3f)
                     .max_energy(.4f)
                     .max_loudness(.8f)
                     .max_tempo(100f)
                     .min_acousticness(.7f)
                     .min_valence(.33f)
-                    .max_valence(.66f);
+                    .max_valence(.66f)
+                    .limit(9);
         } else if (mood.equals("ANGRY")) {
             recRequest
+                    .seed_genres("edm")
                     .max_danceability(.3f)
                     .max_energy(.4f)
                     .min_tempo(100f)
-                    .max_valence(.33f);
+                    .max_valence(.33f)
+                    .limit(9);
         }
 
         return recRequest.build();

@@ -14,6 +14,7 @@ const LandingPage = ({location}) => {
     const [playlistModal, setPlaylistModal] = React.useState(false);
     const [pauseSong, setPauseSong] = React.useState(false);
     const [songData, setSongData] = React.useState('');
+    const [recSongs, setRecSongs] = React.useState([]);
     //click on song, set to true to display button, generate new songs, set it back to false
     const [displayPlayorPause, setDisplayPlayOrPause] = React.useState(false);
 
@@ -31,13 +32,17 @@ const LandingPage = ({location}) => {
         setPauseSong(true);
     }
 
-    const CurSongData = (data) => {
+    const curSongData = (data) => {
         setSongData(data);
     }
+    const setRecommendedSongs = (songs) => {
+        setRecSongs(songs);
+    } 
 
     return(
         <div>
             <WebcamModal
+                setRecommendedSongs={setRecommendedSongs}
 				show={modalShow}
 				onHide={() => setModalShow(false)}
 			/>
@@ -48,12 +53,10 @@ const LandingPage = ({location}) => {
                     Launch webcam
                 </Button>
             </div>
-			<Reccomendation CurSongData={CurSongData} songClick={songClick}/>    
+			<Reccomendation recSongs={recSongs} curSongData={curSongData} songClick={songClick}/> 
+            <PlayOrPause togglePause={togglePause} pauseSong={pauseSong} songData={songData}/>   
             <PlaylistModal songData={songData}/>
-            <PlayOrPause togglePause={togglePause} pauseSong={pauseSong} songData={songData}/>
             <Player/>
-            
-
         </div>
     )
 };

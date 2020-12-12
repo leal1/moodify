@@ -1,11 +1,9 @@
 package com.example.moodifyserver.controller;
 
-import com.example.moodifyserver.service.FaceRecognitionService;
-import com.example.moodifyserver.service.PlaylistService;
-import com.example.moodifyserver.service.RecommendationService;
-import com.example.moodifyserver.service.SDKPlayerService;
+import com.example.moodifyserver.service.*;
 import com.wrapper.spotify.model_objects.IPlaylistItem;
 import com.wrapper.spotify.model_objects.specification.PlaylistSimplified;
+import com.wrapper.spotify.model_objects.specification.Track;
 import com.wrapper.spotify.model_objects.specification.TrackSimplified;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -23,6 +21,8 @@ public class SpotifyController {
     private FaceRecognitionService faceRecognitionService;
     @Autowired
     private SDKPlayerService sdkPlayerService;
+    @Autowired
+    private TrackService trackService;
 
     @GetMapping("/playlists")
     public ResponseEntity<PlaylistSimplified[]> getCurUserPlaylists(@RequestHeader(value ="Authorization") String accessToken) {
@@ -34,6 +34,7 @@ public class SpotifyController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
     @PostMapping("/playlists/{playlistID}/song")
         public ResponseEntity<Void> addCurrentSongToPlaylist(@RequestHeader(value ="Authorization") String accessToken,
                                                                @RequestParam(value="uri")  String[] URI,
@@ -48,8 +49,10 @@ public class SpotifyController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
     @GetMapping("/recommendations")
-    public ResponseEntity<TrackSimplified[]> getSongRecommendations(@RequestHeader(value = "Authorization") String accessToken, @RequestParam(value = "mood") String mood){
+    public ResponseEntity<TrackSimplified[]> getSongRecommendations(@RequestHeader(value = "Authorization") String accessToken,
+                                                                    @RequestParam(value = "mood") String mood){
         try {
             return new ResponseEntity<>(rs.getSongRecommendation(accessToken.substring(7), mood), HttpStatus.OK);
         } catch (Exception e) {
@@ -66,8 +69,8 @@ public class SpotifyController {
         catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
-
     }
+
     @PostMapping("/player/queue")
     public ResponseEntity<String> addSongToQueue(@RequestHeader(value = "Authorization") String accessToken,
                                                @RequestHeader(value = "deviceID") String deviceID,
@@ -119,5 +122,16 @@ public class SpotifyController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-
+    @GetMapping("/tracks")
+    public ResponseEntity<Track[]> getSeveralTracks(@RequestHeader(value ="Authorization") String accessToken,
+                                                    @RequestParam(value = "ids") String[] ids
+                                                                 ) {
+        try{
+            final String accessTokenTrim = accessToken.substring(7);
+            return new ResponseEntity<>(trackService.getSeveralTracks(accessTokenTrim, ids), HttpStatus.OK);
+        }
+        catch(Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }

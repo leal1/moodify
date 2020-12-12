@@ -3,15 +3,15 @@ import SongInformation from '../song_information/songInformation';
 import './reccomendation.css';
 import spotify from '../../api/spotify';
 
-const Reccomendation = ({songClick,CurSongData}) => {
-	const track = "spotify:track:0B2RttXEiyXsMeQ7mMP3EI";
+const Reccomendation = ({songClick,curSongData,recSongs}) => {
     return(
 		<div className='reccomendation-container'>
 			<h2 className="reccomendation-header"> Reccomended tracks: </h2>
 			<div className='reccomendation-grid'>
-				{songs.map((song, index) => {
+				{recSongs.map((song, index) => {
 					return (
-							<SongInformation song={song} CurSongData={CurSongData} songClick={songClick} track={track} key={index} />
+							//Maybe I should add more meaningful prop name (track, images, etc.) instead of all data about songs?
+							<SongInformation song={song} curSongData={curSongData} songClick={songClick} key={index} />
 					)
 				})}
 			</div>

@@ -18,13 +18,9 @@ public class FaceRecognitionController {
     private FaceRecognitionService faceRecognitionService;
 
     @PostMapping("/photo")
-    public ResponseEntity<Void> getMood(@RequestBody String photo) {
+    public ResponseEntity<String> getMood(@RequestBody String photo) {
         try{
-            String mood = faceRecognitionService.getMood(photo);
-            final URI location = URI.create("http://localhost:8080/api/v1/spotify/recommendations?mood="+mood);
-            final HttpHeaders headers = new HttpHeaders();
-            headers.setLocation(location);
-            return new ResponseEntity<>(headers,HttpStatus.OK);
+            return new ResponseEntity<>(faceRecognitionService.getMood(photo),HttpStatus.OK);
         }
         catch(Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);

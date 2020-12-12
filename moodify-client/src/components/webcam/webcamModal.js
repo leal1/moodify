@@ -26,12 +26,16 @@ const WebcamModal = (props) => {
             headers
         })
         .then((response) => {
-            spotify.getSongReccomendations(response.data)
-            .then(res => {
-                console.log(res);
-            })
-         
+            return spotify.getSongReccomendations(response.data)
         })
+        .then(response => {
+            const spotifyIDS = response.data.map(song => song.id);
+            return spotify.getSeveralTracks(spotifyIDS);                
+        })
+        .then(response => {
+            console.log(response.data);
+            props.setRecommendedSongs(response.data);
+        })   
     },[webcamRef])
 
     const clearScreenshot = () => {
