@@ -17,12 +17,17 @@ const WebcamModal = (props) => {
         const imageSrc = webcamRef.current.getScreenshot();
         console.log(imageSrc);
         setScreenshot(imageSrc);
+    },[webcamRef])
+
+    const sendPhoto = () => {
+        props.onHide();
         const accessToken = Cookies.get('accessToken');
+
         const headers = {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${accessToken}`
         }
-        axios.post(`${BASE_API_URL}/rekognition/photo`, imageSrc, {
+        axios.post(`${BASE_API_URL}/rekognition/photo`, screenshot, {
             headers
         })
         .then((response) => {
@@ -30,13 +35,13 @@ const WebcamModal = (props) => {
         })
         .then(response => {
             const spotifyIDS = response.data.map(song => song.id);
-            return spotify.getSeveralTracks(spotifyIDS);                
+            return spotify.getSeveralTracks(spotifyIDS);
         })
         .then(response => {
             console.log(response.data);
             props.setRecommendedSongs(response.data);
-        })   
-    },[webcamRef])
+        })
+    }
 
     const clearScreenshot = () => {
         setScreenshot("");
@@ -68,9 +73,9 @@ const WebcamModal = (props) => {
             </Modal.Body>
             <Modal.Footer>
                 <div class="flex-container">
-                    {screenshot ==='' && <Button variant="outline-primary" onClick={capture}>Capture photo</Button>}
-                    {screenshot !=='' && <Button variant="outline-primary" onClick={capture}>Use this photo?</Button>}
-                    {screenshot !=='' && <Button variant="outline-danger" onClick={clearScreenshot}>Take another </Button>}
+                    {screenshot === '' && <Button variant="outline-primary" onClick={capture}>Capture photo</Button>}
+                    {screenshot !== '' && <Button variant="outline-primary" onClick={sendPhoto}>Use this photo?</Button>}
+                    {screenshot !== '' && <Button variant="outline-danger" onClick={clearScreenshot}>Take another </Button>}
                 </div>
 
             </Modal.Footer>

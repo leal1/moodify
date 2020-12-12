@@ -13,7 +13,7 @@ const Login = () => {
     }
 
     return (
-            <div class="login-container">
+            <div className="login-container">
                 <div>
                     <h1>Moodify</h1>
                     <br /> <br /> <br />
