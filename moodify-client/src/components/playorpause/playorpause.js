@@ -1,6 +1,6 @@
 import React from 'react';
 import {Button} from 'react-bootstrap';
-import * as spotify from '../../api/spotify';
+import * as spotify from 'api/spotify';
 import './playorpause.css';
 
 const PlayOrPause = ({togglePause, pauseSong, songData}) => {

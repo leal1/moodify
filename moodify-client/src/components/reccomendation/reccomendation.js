@@ -1,7 +1,7 @@
-import {songs} from '../../util/fakeSongs';
-import SongInformation from '../song_information/songInformation';
+import {songs} from 'util/fakeSongs';
+import SongInformation from 'components/song_information/songInformation';
 import './reccomendation.css';
-import spotify from '../../api/spotify';
+import spotify from 'api/spotify';
 
 const Reccomendation = ({songClick,curSongData,recSongs}) => {
     return(

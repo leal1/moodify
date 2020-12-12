@@ -1,8 +1,8 @@
 import React, {useState,useCallback} from 'react';
 import {Modal,Button} from 'react-bootstrap';
-import * as spotify from '../../api/spotify';
-const Playlist = ({playlistID,name,images,songData}) => {
+import * as spotify from 'api/spotify';
 
+const Playlist = ({playlistID,name,images,songData}) => {
     const hasImage = images.length > 0;
     const handleAddSong = () => {
         spotify.addCurrentSongToPlaylist(playlistID,[songData.uri])

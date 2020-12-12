@@ -1,16 +1,17 @@
 import React , {useEffect, useCallback, useState} from 'react';
-import WebcamModal from './webcam/webcamModal';
+import WebcamModal from 'components/modal/webcam/webcamModal';
+import GenreModal from 'components/modal/genre/genreModal';
 import Reccomendation from './reccomendation/reccomendation';
 import queryString from 'query-string';
-import * as auth from '../api/auth';
-import PlaylistModal from './playlist_modal/playlistModal';
-import Player from './player/player';
+import * as auth from 'api/auth';
+import PlaylistModal from 'components/modal/playlist/playlistModal';
+import Player from 'components/player/player';
 import Button from 'react-bootstrap/Button';
-import PlayOrPause from './playorpause/playorpause';
-import * as spotify from '../api/spotify';
+import PlayOrPause from 'components/playorpause/playorpause';
 
 const LandingPage = ({location}) => {
     const [showWebcamModal, setShowWebcamModal] = React.useState(false);
+    const [showGenreModal, setShowGenreModal] = React.useState(false);
     const [playlistModal, setPlaylistModal] = React.useState(false);
     const [pauseSong, setPauseSong] = React.useState(false);
     const [songData, setSongData] = React.useState('');
@@ -45,6 +46,10 @@ const LandingPage = ({location}) => {
                 setRecommendedSongs={setRecommendedSongs}
 				show={showWebcamModal}
 				onHide={() => setShowWebcamModal(false)}
+			/>
+            <GenreModal
+				show={showGenreModal}
+				onHide={() => setShowGenreModal(false)}
 			/>
             <h1 className="text-center">BEST SPOTIFY APP</h1>
 			<p className="text-center">Take a picture of your face so we can analyze your mood and reccomend songs!</p>

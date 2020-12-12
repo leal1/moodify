@@ -4,12 +4,12 @@ import Container from 'react-bootstrap/Container';
 import React, { useState } from 'react';
 import Cookies from 'js-cookie';
 import Webcam from 'react-webcam';
-import * as spotify from '../../api/spotify';
-import axios from '../../util/axiosConfig';
-import { BASE_API_URL } from '../../util/constants';
+import * as spotify from 'api/spotify';
+import axios from 'util/axiosConfig';
+import { BASE_API_URL } from 'util/constants';
 import './webcamModal.css';
 
-const GenreModal = (props) => {
+const WebcamModal = (props) => {
     const webcamRef = React.useRef(null);
     const [screenshot, setScreenshot] = useState("");
 
@@ -17,7 +17,6 @@ const GenreModal = (props) => {
         const imageSrc = webcamRef.current.getScreenshot();
         console.log(imageSrc);
         setScreenshot(imageSrc);
-
     },[webcamRef])
 
     const sendPhoto = () => {
@@ -57,21 +56,26 @@ const GenreModal = (props) => {
         >
             <Modal.Header closeButton>
                 <Modal.Title id="contained-modal-title-vcenter">
-                    Select some genres!
+                    Take a picture!
                 </Modal.Title>
             </Modal.Header>
             <Modal.Body>
                 <Container fluid>
                     <div class="flex-container">
-						genres will go here.
+                    {screenshot===''
+                        ? <Webcam className="min-width" audio={false} ref={webcamRef} screenshotFormat="image/png"/>
+                        : <img className="min-width" src={`${screenshot}`}/>
+                        
+                    }
                     </div>
                 </Container>
   
             </Modal.Body>
             <Modal.Footer>
                 <div class="flex-container">
-					<Button variant="outline-primary" onClick={capture}> Back </Button>
-					<Button variant="outline-primary" onClick={capture}> Done! </Button>
+                    {screenshot === '' && <Button variant="outline-primary" onClick={capture}>Capture photo</Button>}
+                    {screenshot !== '' && <Button variant="outline-primary" onClick={sendPhoto}>Use this photo?</Button>}
+                    {screenshot !== '' && <Button variant="outline-danger" onClick={clearScreenshot}>Take another </Button>}
                 </div>
 
             </Modal.Footer>
@@ -80,4 +84,4 @@ const GenreModal = (props) => {
     )
 }
 
-export default GenreModal;
+export default WebcamModal;

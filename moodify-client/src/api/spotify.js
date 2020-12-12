@@ -1,6 +1,6 @@
-import axios from '../util/axiosConfig';
+import axios from 'util/axiosConfig';
 import Cookies from 'js-cookie';
-import { BASE_API_URL } from '../util/constants';
+import { BASE_API_URL } from 'util/constants';
 
 export const getUserProfile = () => {
         const accessToken = Cookies.get('accessToken');
