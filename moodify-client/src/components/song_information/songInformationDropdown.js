@@ -4,7 +4,6 @@ const SongInformationDropdown = (props) => {
 
     const handleAddSongClick = (e) => {
         e.preventDefault();
-        console.log(props.song);
         props.songInformationData(props.song);
         props.onShowPlaylistModal();
         

@@ -5,7 +5,7 @@ import * as spotify from 'api/spotify';
 const SongInformation = (props) => {
 	const handleSongClick = (e) => {
 		//Don't play song if click on dropdown
-		if(e.target.type =='button') {
+		if(e.target.type ==='button' || e.target.type ==='submit') {
 			return;
 		}
 		//Clicking on song will start the song
