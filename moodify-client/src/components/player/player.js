@@ -9,7 +9,6 @@ const Player = () => {
         window.onSpotifyWebPlaybackSDKReady = () => {
             handleLoadSuccess();
         };
-
     },[])
     const handleLoadSuccess = () => {
         setScriptLoaded(true);

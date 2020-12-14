@@ -1,3 +1,7 @@
 .mt-25 {
     margin-top:25px;
 }
+
+.hover {
+    cursor:Pointer;
+}

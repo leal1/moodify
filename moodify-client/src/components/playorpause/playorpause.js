@@ -1,38 +1,36 @@
 import React from 'react';
-import {Button} from 'react-bootstrap';
 import * as spotify from 'api/spotify';
 import './playorpause.css';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPlayCircle, faPauseCircle} from '@fortawesome/free-solid-svg-icons';
 
-const PlayOrPause = ({togglePause, pauseSong, songData}) => {
+const PlayOrPause = ({togglePause, pauseSong, curSongData, showPlayorPause}) => {
 
-    const toggle = pauseSong ? 'Pause' : 'Play';
     const handlePause = () => {
         togglePause();
         spotify.pauseUserPlayback()
-            .then(res => {
+            .then(response => {
                 console.log('Pausing Song!');
             })
     }
     const handlePlay = () => {
         togglePause();
         spotify.resumeUserPlayback()
-        .then(res => {
+        .then(response => {
             console.log('Playing Song!');
         })
 
     }
-    const button = pauseSong ?  <Button className="mt-25" variant="outline-success" onClick={handlePause}> Pause </Button>
-                             :  <Button className="mt-25" variant="outline-success" onClick={handlePlay}> Play </Button>
+    const button = pauseSong ?  <FontAwesomeIcon className="hover" onClick={handlePause}icon={faPauseCircle} size="3x" color="blue" /> 
+                             :  <FontAwesomeIcon className="hover" onClick={handlePlay} icon={faPlayCircle} size="3x" color="blue" />
     return(
-        <div className="text-center">
-        {songData && button}
-        <div className ="mt-25">
-            <h3>{songData.name}</h3>
-            <p>{ songData && songData.artists.map(artist => artist.name).join(', ')}</p>
+        <div className="text-center mt-25">
+            {showPlayorPause && button}
+            <div className ="mt-25">
+                <h3>{curSongData.name}</h3>
+                <p>{ curSongData && curSongData.artists.map(artist => artist.name).join(', ')}</p>
+            </div>
         </div>
-        
-        </div>
-            
     )
 }
 export default PlayOrPause;

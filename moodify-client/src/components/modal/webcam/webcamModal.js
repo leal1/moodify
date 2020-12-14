@@ -30,7 +30,7 @@ const WebcamModal = (props) => {
         axios.post(`${BASE_API_URL}/rekognition/photo`, screenshot, {
             headers
         })
-        .then((response) => {
+        .then(response => {
             return spotify.getSongReccomendations(response.data)
         })
         .then(response => {

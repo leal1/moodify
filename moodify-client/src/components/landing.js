@@ -9,15 +9,17 @@ import Player from 'components/player/player';
 import Button from 'react-bootstrap/Button';
 import PlayOrPause from 'components/playorpause/playorpause';
 
+
 const LandingPage = ({location}) => {
     const [showWebcamModal, setShowWebcamModal] = React.useState(false);
     const [showGenreModal, setShowGenreModal] = React.useState(false);
-    const [playlistModal, setPlaylistModal] = React.useState(false);
+    const [showPlaylistModal, setPlaylistModal] = React.useState(false);
     const [pauseSong, setPauseSong] = React.useState(false);
-    const [songData, setSongData] = React.useState('');
+    const [showPlayorPause, setPlayorPause] = React.useState(false);
+    const [songInfoData, setSongInfoData] = React.useState('');
+    const [curSongData, setcurSongData] = React.useState('');
     const [recSongs, setRecSongs] = React.useState([]);
-    //click on song, set to true to display button, generate new songs, set it back to false
-    const [displayPlayorPause, setDisplayPlayOrPause] = React.useState(false);
+    
 
     useEffect(() => {
         // extract code from URL
@@ -25,25 +27,10 @@ const LandingPage = ({location}) => {
         auth.getTokens(code);
     }, [location.search]);
 
-    const togglePause = () => {
-        setPauseSong(!pauseSong);
-    }
-
-    const songClick = () => {
-        setPauseSong(true);
-    }
-
-    const curSongData = (data) => {
-        setSongData(data);
-    }
-    const setRecommendedSongs = (songs) => {
-        setRecSongs(songs);
-    } 
-
     return(
         <div>
             <WebcamModal
-                setRecommendedSongs={setRecommendedSongs}
+                setRecommendedSongs={(songs) => { setRecSongs(songs)}}
 				show={showWebcamModal}
 				onHide={() => setShowWebcamModal(false)}
 			/>
@@ -58,10 +45,27 @@ const LandingPage = ({location}) => {
                     Launch webcam
                 </Button>
             </div>
-			<Reccomendation recSongs={recSongs} curSongData={curSongData} songClick={songClick}/> 
-            <PlayOrPause togglePause={togglePause} pauseSong={pauseSong} songData={songData}/>   
-            <PlaylistModal songData={songData}/>
+            <Reccomendation 
+                displayPlayorPause={() => { setPlayorPause(true)}} 
+                onShowPlaylistModal={() => {setPlaylistModal(true)}} 
+                recSongs={recSongs} 
+                songInformationData={(data) => {setSongInfoData(data)}} 
+                setCurrentSongData={(data) => {setcurSongData(data)}} 
+                songClick={()=>{setPauseSong(true)}}
+            /> 
+            <PlayOrPause 
+                togglePause={() => {setPauseSong(!pauseSong)}} 
+                showPlayorPause={showPlayorPause} 
+                pauseSong={pauseSong} 
+                curSongData={curSongData}
+            />   
+            <PlaylistModal
+                showPlaylistModal={showPlaylistModal}
+                hidePlaylistModal={() => {setPlaylistModal(false)}}
+                songInfoData={songInfoData}
+             />
             <Player/>
+            
         </div>
     )
 };

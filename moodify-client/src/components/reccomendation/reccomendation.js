@@ -3,7 +3,7 @@ import SongInformation from 'components/song_information/songInformation';
 import './reccomendation.css';
 import spotify from 'api/spotify';
 
-const Reccomendation = ({songClick,curSongData,recSongs}) => {
+const Reccomendation = ({songClick, setCurrentSongData, recSongs, onShowPlaylistModal, displayPlayorPause, songInformationData}) => {
     return(
 		<div className='reccomendation-container'>
 			<h2 className="reccomendation-header"> Reccomended tracks: </h2>
@@ -11,7 +11,15 @@ const Reccomendation = ({songClick,curSongData,recSongs}) => {
 				{recSongs.map((song, index) => {
 					return (
 							//Maybe I should add more meaningful prop name (track, images, etc.) instead of all data about songs?
-							<SongInformation song={song} curSongData={curSongData} songClick={songClick} key={index} />
+							<SongInformation 
+								displayPlayorPause={displayPlayorPause} 
+								onShowPlaylistModal={onShowPlaylistModal} 
+								song={song} 
+								setCurrentSongData={setCurrentSongData} 
+								songInformationData={songInformationData} 
+								songClick={songClick} 
+								key={index} 
+							/>
 					)
 				})}
 			</div>

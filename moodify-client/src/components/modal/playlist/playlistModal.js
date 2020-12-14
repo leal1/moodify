@@ -1,42 +1,52 @@
-import React, {useState, useCallback} from 'react';
-import {Button, Modal} from 'react-bootstrap';
+import React, {useState,useEffect} from 'react';
+import {Modal} from 'react-bootstrap';
 import * as spotify from 'api/spotify';
-import Playlist from 'components/playlist/playlist';
+import Playlist from 'components/modal/playlist/playlist';
+import PlaylistModalPagination from 'components/modal/playlist/playlistModalPagination';
 import './playlistModal.css';
 
 
-const PlaylistModal = ({songData}) => {
-    const [playlistModal, setPlaylistModal] = React.useState(false);
+const PlaylistModal = (props) => {
     const [playlists,setPlaylists] = useState([]);
-
-    const getUserPlaylists = () => {
+    const [playlistPage, setPlaylistPage] = useState([]);
+    useEffect(() => {
         spotify.getUserPlaylists()
-            .then((res) => {
-                const playlistItems = res.data.map(({id,name,images}) =>
+            .then(response => {
+                const playlistItems = response.data.map(({id,name,images}) =>
                     ({id,name,images})
                 );
-                console.log(playlistItems);
-                setPlaylists(playlistItems);       
-            })
+            setPlaylists(playlistItems);
+        })
+    }, []);
+ 
+    const displayPlaylistPage = (playlistPage) => {
+        setPlaylistPage(playlistPage);
+    } 
+
+    const hideModal = () => {
+        props.hidePlaylistModal();
+        displayPlaylistPage([]);
     }
-    const saveSongCLick = () => {
-        setPlaylistModal(true);
-        getUserPlaylists();
-    }
-   
     return (
         <>
-            <div className = "text-center mt-25">
-                {songData && <Button variant="outline-success" onClick={saveSongCLick}> Save Song </Button>}
-            </div>
-            <Modal style={{top:"60%"}}show={playlistModal} onHide={() => setPlaylistModal(false)}>
+            <Modal centered  
+                show={props.showPlaylistModal}
+                onShow={()=>{setPlaylistPage(playlists.slice(0,3))}}
+                onHide={hideModal}
+                centered  
+            >
                 <Modal.Header closeButton>
-                    <Modal.Title>Select Playlist</Modal.Title>
+                    <Modal.Title> 
+                    Add Song to Playlist
+                    </Modal.Title>
                 </Modal.Header>
+               
                 <div className="playlist-flex">
-                    {playlists.map(({id,name,images}) => <Playlist playlistID={id} key={id} name={name} images ={images} songData={songData}/>)}
+                    {playlistPage.map(({id,name,images}) => <Playlist playlistID={id} key={id} name={name} images ={images} songInfoData={props.songInfoData}/>)}
                 </div>
+          
                 <Modal.Footer>
+                    <PlaylistModalPagination playlists={playlists} displayPlaylistPage={displayPlaylistPage}/>          
                 </Modal.Footer>
           </Modal>
         </>
