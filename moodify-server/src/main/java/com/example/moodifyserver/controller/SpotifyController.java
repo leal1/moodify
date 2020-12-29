@@ -100,10 +100,14 @@ public class SpotifyController {
 
     @GetMapping("/recommendations")
     public ResponseEntity<TrackSimplified[]> getSongRecommendations(@RequestHeader(value = "Authorization") String accessToken,
-                                                                    @RequestParam(value = "mood") String mood){
+                                                                    @RequestParam(value = "mood") String mood,
+                                                                    @RequestParam(value = "genres") String genres){
         try {
+            //TODO: split Genre string and pass to service
+            System.out.println(genres);
             return new ResponseEntity<>(rs.getSongRecommendation(accessToken.substring(7), mood), HttpStatus.OK);
         } catch (Exception e) {
+            System.out.println(e);
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }

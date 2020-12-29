@@ -98,13 +98,14 @@ export const getUsersCurrentlyPlayingSong = () => {
          return axios({ method: 'get', url: `${BASE_API_URL}/spotify/player/currently-playing`, headers});
 }
 
-export const getSongReccomendations = (mood) => {
+export const getSongReccomendations = (mood, genres) => {
         const accessToken = Cookies.get('accessToken');
          const headers = {
                  'Authorization': `Bearer ${accessToken}`
          }
+         const genresString = genres.join();
          // Have to call like this to pass 
-         return axios({ method: 'get', url: `${BASE_API_URL}/spotify/recommendations?mood=${mood}`, headers});
+         return axios({ method: 'get', url: `${BASE_API_URL}/spotify/recommendations?mood=${mood}&genres=${genresString}`, headers});
 }
 
 export const getSeveralTracks = (ids) => {

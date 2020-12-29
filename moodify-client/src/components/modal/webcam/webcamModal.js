@@ -2,11 +2,8 @@ import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 import Container from 'react-bootstrap/Container';
 import React, { useState } from 'react';
-import Cookies from 'js-cookie';
 import Webcam from 'react-webcam';
-import * as spotify from 'api/spotify';
-import axios from 'util/axiosConfig';
-import { BASE_API_URL } from 'util/constants';
+import * as rekognition from 'api/rekognition';
 import './webcamModal.css';
 
 const WebcamModal = (props) => {
@@ -15,35 +12,21 @@ const WebcamModal = (props) => {
 
     const capture = React.useCallback(() => {
         const imageSrc = webcamRef.current.getScreenshot();
-        console.log(imageSrc);
         setScreenshot(imageSrc);
     },[webcamRef])
 
-    const sendPhoto = () => {
-        props.onHide();
-        const accessToken = Cookies.get('accessToken');
-
-        const headers = {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${accessToken}`
+    const sendPhoto = async () => {
+        props.onUsePhoto();
+        try {
+            const response = await rekognition.sendPhoto(screenshot);
+            props.setMoodFromPhoto(response.data);
+        } catch(err) {
+            console.error(err);
         }
-        axios.post(`${BASE_API_URL}/rekognition/photo`, screenshot, {
-            headers
-        })
-        .then(response => {
-            return spotify.getSongReccomendations(response.data)
-        })
-        .then(response => {
-            const spotifyIDS = response.data.map(song => song.id);
-            return spotify.getSeveralTracks(spotifyIDS);
-        })
-        .then(response => {
-            console.log(response.data);
-            props.setRecommendedSongs(response.data);
-        })
     }
 
     const clearScreenshot = () => {
+        props.clearMood();
         setScreenshot("");
     }
 
@@ -53,6 +36,7 @@ const WebcamModal = (props) => {
             size="lg"
             aria-labelledby="contained-modal-title-vcenter"
             centered
+            onHide={() => props.handleClose()}
         >
             <Modal.Header closeButton>
                 <Modal.Title id="contained-modal-title-vcenter">
@@ -64,7 +48,7 @@ const WebcamModal = (props) => {
                     <div class="flex-container">
                     {screenshot===''
                         ? <Webcam className="min-width" audio={false} ref={webcamRef} screenshotFormat="image/png"/>
-                        : <img className="min-width" src={`${screenshot}`}/>
+                        : <img className="min-width" src={`${screenshot}`} alt="screenshot"/>
                         
                     }
                     </div>

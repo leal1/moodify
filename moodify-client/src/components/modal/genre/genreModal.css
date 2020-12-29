@@ -1,0 +1,11 @@
+.genre-group {
+  /* width: 100%; */
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: center;
+  margin: 0 auto;
+}
+
+.genre-button {
+  border-radius: 4px;
+}

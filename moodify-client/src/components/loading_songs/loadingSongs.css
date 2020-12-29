@@ -1,0 +1,9 @@
+/* .loading-wrapper {
+  width: 100%;
+
+} */
+.loading-container {
+  display: flex;
+  margin: 0 auto;
+  justify-content: center;
+}
