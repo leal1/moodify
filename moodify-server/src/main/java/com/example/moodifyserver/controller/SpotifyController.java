@@ -1,28 +1,77 @@
 package com.example.moodifyserver.controller;
 
+import com.example.moodifyserver.model.Song;
 import com.example.moodifyserver.service.*;
 import com.wrapper.spotify.model_objects.IPlaylistItem;
 import com.wrapper.spotify.model_objects.specification.PlaylistSimplified;
 import com.wrapper.spotify.model_objects.specification.Track;
 import com.wrapper.spotify.model_objects.specification.TrackSimplified;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import java.util.Map;
+import java.util.Set;
 
+@RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/v1/spotify")
 public class SpotifyController {
-    @Autowired
-    private PlaylistService playlistService;
-    @Autowired
-    private RecommendationService rs;
-    @Autowired
-    private FaceRecognitionService faceRecognitionService;
-    @Autowired
-    private SDKPlayerService sdkPlayerService;
-    @Autowired
-    private TrackService trackService;
+
+    private final PlaylistService playlistService;
+    private final RecommendationService rs;
+    private final SDKPlayerService sdkPlayerService;
+    private final TrackService trackService;
+    private final UserProfileService userProfileService;
+    private final UserService userService;
+
+    @GetMapping("/user/{id}/songs")
+    public ResponseEntity<Set<Song>> getSongsFromUser(@PathVariable String id) {
+        try {
+            return new ResponseEntity<>(userService.getSongsFromUser(id),HttpStatus.CREATED);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @PostMapping("/user/{id}/song")
+    public ResponseEntity<Void> addSongToUser(@PathVariable String id, @RequestBody Song song) {
+        try {
+            userService.addSongToUser(id,song);
+            return new ResponseEntity<>(HttpStatus.CREATED);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    @DeleteMapping("/user/{id}/song/{songId}")
+    public ResponseEntity<Void> deleteSongFromUser(@PathVariable String id, @PathVariable String songId) {
+        try {
+            userService.deleteSongFromUser(id,songId);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @PostMapping("/user")
+    public ResponseEntity<Void> addUser(@RequestBody com.example.moodifyserver.model.User newUser) {
+        try {
+            userService.addUser(newUser);
+            return new ResponseEntity<>(HttpStatus.CREATED);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping("/userProfile")
+    public ResponseEntity<Map<String,String>> getUserProfile(@RequestHeader(value = "Authorization") String accessToken) {
+        try {
+            final String accessTokenTrim = accessToken.substring(7);
+            return new ResponseEntity<>(userProfileService.getUserProfile(accessTokenTrim), HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 
     @GetMapping("/playlists")
     public ResponseEntity<PlaylistSimplified[]> getCurUserPlaylists(@RequestHeader(value ="Authorization") String accessToken) {
@@ -37,9 +86,8 @@ public class SpotifyController {
 
     @PostMapping("/playlists/{playlistID}/song")
         public ResponseEntity<Void> addCurrentSongToPlaylist(@RequestHeader(value ="Authorization") String accessToken,
-                                                               @RequestParam(value="uri")  String[] URI,
-                                                               @PathVariable("playlistID") String playlistID)
-                                                                {
+                                                             @RequestParam(value="uri")  String[] URI,
+                                                             @PathVariable("playlistID") String playlistID) {
         try{
             final String accessTokenTrim = accessToken.substring(7);
             playlistService.addCurrentSongToPlaylist(accessTokenTrim,playlistID,URI);
@@ -72,12 +120,37 @@ public class SpotifyController {
     }
 
     @PostMapping("/player/queue")
-    public ResponseEntity<String> addSongToQueue(@RequestHeader(value = "Authorization") String accessToken,
-                                               @RequestHeader(value = "deviceID") String deviceID,
-                                               @RequestBody() String trackURI ) {
+    public ResponseEntity<Void> addSongToQueue(@RequestHeader(value = "Authorization") String accessToken,
+                                               @RequestParam(value = "deviceID") String deviceID,
+                                               @RequestParam(value = "uri") String trackURI) {
         try {
             final String accessTokenTrim = accessToken.substring(7);
-            return new ResponseEntity<>(sdkPlayerService.addSongToPlayer(accessTokenTrim, deviceID, trackURI), HttpStatus.OK);
+            sdkPlayerService.addSongToPlayer(accessTokenTrim, deviceID, trackURI);
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
+        catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    @PostMapping("/player/next")
+    public ResponseEntity<Void> skipNextSongPlayer(@RequestHeader(value = "Authorization") String accessToken,
+                                                 @RequestParam(value = "deviceID") String deviceID){
+        try {
+            final String accessTokenTrim = accessToken.substring(7);
+            sdkPlayerService.skipNextSongPlayer(accessTokenTrim, deviceID);
+            return new ResponseEntity<>( HttpStatus.OK);
+        }
+        catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    @PostMapping("/player/prev")
+    public ResponseEntity<Void> prevSongPlayer(@RequestHeader(value = "Authorization") String accessToken,
+                                                 @RequestParam(value = "deviceID") String deviceID) {
+        try {
+            final String accessTokenTrim = accessToken.substring(7);
+            sdkPlayerService.prevSongPlayer(accessTokenTrim, deviceID);
+            return new ResponseEntity<>( HttpStatus.OK);
         }
         catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -99,7 +172,7 @@ public class SpotifyController {
 
     @PutMapping("/player/resume/{deviceID}")
     public ResponseEntity<Void> startUserPlayback(@RequestHeader(value = "Authorization") String accessToken,
-                                                    @PathVariable("deviceID") String deviceID) {
+                                                  @PathVariable("deviceID") String deviceID) {
         try {
             final String accessTokenTrim = accessToken.substring(7);
             sdkPlayerService.resumeUserPlayback(accessTokenTrim, deviceID);
@@ -112,7 +185,7 @@ public class SpotifyController {
 
     @PutMapping("/player/pause/{deviceID}")
     public ResponseEntity<Void> pauseUserPlayback(@RequestHeader(value = "Authorization") String accessToken,
-                                                    @PathVariable("deviceID") String deviceID) {
+                                                  @PathVariable("deviceID") String deviceID) {
         try {
             final String accessTokenTrim = accessToken.substring(7);
             sdkPlayerService.pauseUserPlayback(accessTokenTrim, deviceID);
@@ -124,8 +197,7 @@ public class SpotifyController {
     }
     @GetMapping("/tracks")
     public ResponseEntity<Track[]> getSeveralTracks(@RequestHeader(value ="Authorization") String accessToken,
-                                                    @RequestParam(value = "ids") String[] ids
-                                                                 ) {
+                                                    @RequestParam(value = "ids") String[] ids) {
         try{
             final String accessTokenTrim = accessToken.substring(7);
             return new ResponseEntity<>(trackService.getSeveralTracks(accessTokenTrim, ids), HttpStatus.OK);

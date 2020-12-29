@@ -1,0 +1,33 @@
+.song-flex  {
+    display:flex;
+    flex-direction:column;
+    
+}
+.song-flex-row {
+    display:flex;
+    flex-direction:row;
+    height:75px;
+}
+
+.song-info {
+    display:flex;
+    flex-direction:column;
+    font-size: 14px;
+    flex-grow:1;
+}
+.mt-25 {
+    margin-top:25px;
+}
+
+.songModal-img {
+    max-width:100%;
+    max-height:100%;
+}
+.songImage{
+    flex-basis:10%;
+    margin-right:10px;
+}
+.songButton {
+    margin-right:10px;
+}
+

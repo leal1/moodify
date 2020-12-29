@@ -2,6 +2,24 @@ import axios from 'util/axiosConfig';
 import Cookies from 'js-cookie';
 import { BASE_API_URL } from 'util/constants';
 
+
+export const getSongsFromUser = () => {
+        const id = Cookies.get('userId');
+        return axios({ method: 'get', url:`${BASE_API_URL}/spotify/user/${id}/songs`});
+}
+export const addSongToUser = (song) => {
+        const id = Cookies.get('userId');
+        return axios.post(`${BASE_API_URL}/spotify/user/${id}/song`,song);
+}
+export const deleteSongFromUser = (songId) => {
+        const id = Cookies.get('userId');
+        return axios.delete(`${BASE_API_URL}/spotify/user/${id}/song/${songId}`);
+}
+
+export const addSpotifyUser = (spotifyUser) => {
+        return axios.post(`${BASE_API_URL}/spotify/user`,spotifyUser);
+}
+
 export const getUserProfile = () => {
         const accessToken = Cookies.get('accessToken');
         console.log(accessToken);
@@ -9,7 +27,7 @@ export const getUserProfile = () => {
                 'Authorization': `Bearer ${accessToken}`
         }
         // Have to call like this to pass
-       return axios({ method: 'get', url: `${BASE_API_URL}/test/userProfile`, headers});
+       return axios({ method: 'get', url: `${BASE_API_URL}/spotify/userProfile`, headers});
 }
 export const getUserPlaylists = () => {
         const accessToken = Cookies.get('accessToken');

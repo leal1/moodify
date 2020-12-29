@@ -8,6 +8,7 @@ const SongInformation = (props) => {
 		if(e.target.type ==='button' || e.target.type ==='submit') {
 			return;
 		}
+		console.log(props.song);
 		//Clicking on song will start the song
 		spotify.startUserPlayback(props.song.uri)
 		.then(response => {

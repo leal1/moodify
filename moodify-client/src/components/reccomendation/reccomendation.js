@@ -13,7 +13,7 @@ const Reccomendation = ({songClick, setCurrentSongData, recSongs, onShowPlaylist
 							//Maybe I should add more meaningful prop name (track, images, etc.) instead of all data about songs?
 							<SongInformation 
 								displayPlayorPause={displayPlayorPause} 
-								onShowPlaylistModal={onShowPlaylistModal} 
+								onShowPlaylistModal={onShowPlaylistModal}
 								song={song} 
 								setCurrentSongData={setCurrentSongData} 
 								songInformationData={songInformationData} 

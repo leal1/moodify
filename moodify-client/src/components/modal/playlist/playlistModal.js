@@ -1,5 +1,5 @@
 import React, {useState,useEffect} from 'react';
-import {Modal} from 'react-bootstrap';
+import {Modal,Alert} from 'react-bootstrap';
 import * as spotify from 'api/spotify';
 import Playlist from 'components/modal/playlist/playlist';
 import PlaylistModalPagination from 'components/modal/playlist/playlistModalPagination';
@@ -29,7 +29,7 @@ const PlaylistModal = (props) => {
     }
     return (
         <>
-            <Modal centered  
+            <Modal 
                 show={props.showPlaylistModal}
                 onShow={()=>{setPlaylistPage(playlists.slice(0,3))}}
                 onHide={hideModal}
