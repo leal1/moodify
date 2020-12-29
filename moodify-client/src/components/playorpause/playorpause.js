@@ -27,7 +27,7 @@ const PlayOrPause = ({togglePause, pauseSong, curSongData, showPlayorPause}) => 
         <div className="text-center mt-25">
             {showPlayorPause && button}
             <div className ="mt-25">
-                <h3>{curSongData.name}</h3>
+                <h3>{ curSongData && curSongData.name}</h3>
                 <p>{ curSongData && curSongData.artists.map(artist => artist.name).join(', ')}</p>
             </div>
         </div>

@@ -7,11 +7,11 @@ import Reccomendation from './reccomendation/reccomendation';
 import queryString from 'query-string';
 import * as auth from 'api/auth';
 import * as spotify from 'api/spotify';
-import PlaylistModal from 'components/modal/playlist/playlistModal';
 import LoadingSongs from 'components/loading_songs/loadingSongs';
 import Player from 'components/player/player';
 import Button from 'react-bootstrap/Button';
 import PlayOrPause from 'components/playorpause/playorpause';
+import Cookies from 'js-cookie';
 
 const LandingPage = ({location}) => {
     const [showWebcamModal, setShowWebcamModal] = React.useState(false);
@@ -154,17 +154,16 @@ const LandingPage = ({location}) => {
                 (loading === true && recSongs.length === 0) && <LoadingSongs></LoadingSongs>
             }
 
-			{ recSongs.length !== 0 && <Reccomendation recSongs={recSongs} curSongData={curSongData} songClick={songClick}/>}
-            <PlayOrPause togglePause={togglePause} pauseSong={pauseSong} songData={songData}/>   
-            <PlaylistModal songData={songData}/>
-            <Reccomendation
+            <PlayOrPause togglePause={togglePause} pauseSong={pauseSong}/>   
+            <PlaylistModal/>
+            { recSongs.length !== 0 && <Reccomendation
                 displayPlayorPause={() => { setPlayorPause(true)}}
                 onShowPlaylistModal={() => {setPlaylistModal(true)}}
                 recSongs={recSongs}
                 songInformationData={(data) => {setSongInfoData(data)}}
                 setCurrentSongData={(data) => {setcurSongData(data)}}
                 songClick={()=>{setPauseSong(true)}}
-            />
+            /> }
             <PlayOrPause
                 togglePause={() => {setPauseSong(!pauseSong)}}
                 showPlayorPause={showPlayorPause}
