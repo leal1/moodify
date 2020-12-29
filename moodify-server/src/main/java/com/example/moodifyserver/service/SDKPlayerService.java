@@ -5,17 +5,41 @@ import com.neovisionaries.i18n.CountryCode;
 import com.wrapper.spotify.SpotifyApi;
 import com.wrapper.spotify.model_objects.IPlaylistItem;
 import com.wrapper.spotify.model_objects.miscellaneous.CurrentlyPlaying;
-import com.wrapper.spotify.requests.data.player.AddItemToUsersPlaybackQueueRequest;
-import com.wrapper.spotify.requests.data.player.GetUsersCurrentlyPlayingTrackRequest;
-import com.wrapper.spotify.requests.data.player.PauseUsersPlaybackRequest;
-import com.wrapper.spotify.requests.data.player.StartResumeUsersPlaybackRequest;
+import com.wrapper.spotify.requests.data.player.*;
 import org.springframework.stereotype.Service;
 
 import java.util.concurrent.CompletableFuture;
 
 @Service
 public class SDKPlayerService {
-    public String addSongToPlayer(String accessToken, String deviceID, String trackURI) {
+    public void prevSongPlayer(String accessToken, String deviceId) {
+        final SpotifyApi spotifyApi = new SpotifyApi.Builder()
+                .setAccessToken(accessToken)
+                .build();
+
+        final SkipUsersPlaybackToPreviousTrackRequest skipUsersPlaybackToPreviousTrackRequest = spotifyApi
+                .skipUsersPlaybackToPreviousTrack()
+                .device_id(deviceId)
+                .build();
+
+        final CompletableFuture<String> stringFuture = skipUsersPlaybackToPreviousTrackRequest.executeAsync();
+        final String string = stringFuture.join();
+    }
+    public void skipNextSongPlayer(String accessToken, String deviceId) {
+        final SpotifyApi spotifyApi = new SpotifyApi.Builder()
+                .setAccessToken(accessToken)
+                .build();
+
+        final SkipUsersPlaybackToNextTrackRequest skipUsersPlaybackToNextTrackRequest = spotifyApi
+                .skipUsersPlaybackToNextTrack()
+                .device_id(deviceId)
+                .build();
+
+        final CompletableFuture<String> stringFuture = skipUsersPlaybackToNextTrackRequest.executeAsync();
+        final String string = stringFuture.join();
+    }
+
+    public void addSongToPlayer(String accessToken, String deviceID, String trackURI) {
         final SpotifyApi spotifyApi = new SpotifyApi.Builder()
             .setAccessToken(accessToken)
             .build();
@@ -25,7 +49,6 @@ public class SDKPlayerService {
             .build();
         final CompletableFuture<String> stringFuture = addItemToUsersPlaybackQueueRequest.executeAsync();
         final String string = stringFuture.join();
-        return string;
     }
     public void startUserPlayback(String accessToken, String deviceId, String trackURI) {
         final SpotifyApi spotifyApi = new SpotifyApi.Builder()
